@@ -30,6 +30,20 @@ public class ProductController : ControllerBase
         }
     }
 
+    [HttpGet("{productId}")]
+    public IActionResult GetId(Guid productId)
+    {
+        try
+        {
+            return Ok(_productService.GetId(productId));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error on Get");
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
+
     [HttpPost]
     public IActionResult Post([FromBody] Product product)
     {

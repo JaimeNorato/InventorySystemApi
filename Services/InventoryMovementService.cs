@@ -19,7 +19,6 @@ public class InventoryMovementService : IInventoryMovementService
 
     public async Task Save(InventoryMovement inventoryMovement)
     {
-        inventoryMovement.Date = DateTime.Now;
         context.Add(inventoryMovement);
         await context.SaveChangesAsync();
     }
@@ -30,8 +29,3 @@ public interface IInventoryMovementService
     IEnumerable<InventoryMovement> Get(Guid productId);
     Task Save(InventoryMovement inventoryMovement);
 }
-
-
-
-
-

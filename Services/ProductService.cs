@@ -17,6 +17,11 @@ public class ProductService : IProductService
         return context.Products;
     }
 
+    public Product? GetId(Guid productId)
+    {
+        return context.Products.Find(productId);
+    }
+
     public async Task Save(Product product)
     {
         context.Add(product);
@@ -27,5 +32,6 @@ public class ProductService : IProductService
 public interface IProductService
 {
     IEnumerable<Product> Get();
+    Product? GetId(Guid productId);
     Task Save(Product product);
 }
