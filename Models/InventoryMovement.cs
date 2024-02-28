@@ -1,11 +1,18 @@
-namespace InventorySystemApi.Models
+namespace InventorySystemApi.Models;
+
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class InventoryMovement
 {
     public Guid InventoryMovementId { get; set; }
+
     public Guid ProductId { get; set; }
+
     public int Quantity { get; set; }
+
     public DateTime Date { get; set; }
+
     public InventoryMovementType Type { get; set; }
     public string Observation { get; set;}
 

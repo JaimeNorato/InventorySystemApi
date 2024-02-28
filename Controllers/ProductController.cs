@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
+namespace InventorySystemApi.Controllers;
 
-namespace webapi.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
