@@ -38,6 +38,20 @@ app.MapPost("/api/products", async ([FromServices] ProductContext bdContext, [Fr
     return Results.Ok(product);
 });
 
+app.MapGet("/api/inventorymovements/{productId}", async ([FromServices] ProductContext bdContext, [FromRoute] Guid productId) =>
+{
+    return Results.Ok(bdContext.InventoryMovement.Where(im => im.ProductId == productId).ToList());
+});
+
+app.MapPost("/api/inventorymovements", async ([FromServices] ProductContext bdContext, [FromBody] InventoryMovement inventoryMovement) =>
+{
+    inventoryMovement.Date = DateTime.Now;
+    await bdContext.InventoryMovement.AddAsync(inventoryMovement);
+    await bdContext.SaveChangesAsync();
+
+    return Results.Ok(inventoryMovement);
+});
+
 app.UseJwtMiddleware();
 
 // app.MapControllers();

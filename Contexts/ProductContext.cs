@@ -6,8 +6,8 @@ using InventorySystemApi.Models;
 
 public class ProductContext : DbContext
 {
-    public DbSet<InventoryMovement> InventoryMovements { get; set; }
     public DbSet<Product> Product { get; set; }
+    public DbSet<InventoryMovement> InventoryMovement { get; set; }
 
     public ProductContext(DbContextOptions<ProductContext> options) : base(options){}
 
@@ -18,6 +18,7 @@ public class ProductContext : DbContext
             product.HasKey(p => p.ProductId);
             product.Property(p => p.Name).IsRequired().HasMaxLength(250);
             product.Property(p => p.Stock).IsRequired();
+            product.HasMany(p => p.InventoryMovements).WithOne(im => im.Product).HasForeignKey(im => im.ProductId);
         });
 
         modelBuilder.Entity<InventoryMovement>(InventoryMovement => {
