@@ -1,15 +1,14 @@
-namespace InventorySystemApi.Contexts;
-
 using Microsoft.EntityFrameworkCore;
 using InventorySystemApi.Models;
 
+namespace InventorySystemApi.Contexts;
 
 public class ProductContext : DbContext
 {
-    public DbSet<Product> Product { get; set; }
-    public DbSet<InventoryMovement> InventoryMovement { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<InventoryMovement> InventoryMovements { get; set; }
 
-    public ProductContext(DbContextOptions<ProductContext> options) : base(options){}
+    public ProductContext(DbContextOptions<ProductContext> options) : base(options){ }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,7 +17,6 @@ public class ProductContext : DbContext
             product.HasKey(p => p.ProductId);
             product.Property(p => p.Name).IsRequired().HasMaxLength(250);
             product.Property(p => p.Stock).IsRequired();
-            product.HasMany(p => p.InventoryMovements).WithOne(im => im.Product).HasForeignKey(im => im.ProductId);
         });
 
         modelBuilder.Entity<InventoryMovement>(InventoryMovement => {

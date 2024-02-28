@@ -1,11 +1,11 @@
 using InventorySystemApi.Contexts;
-using InventorySystemApi.Models;
-using Microsoft.AspNetCore.Mvc;
+using InventorySystemApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -13,6 +13,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ProductContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("cnMyInventory"))
 );
+
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IInventoryMovementService, InventoryMovementService>();
 
 var app = builder.Build();
 
@@ -25,36 +28,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/api/products", async ([FromServices] ProductContext bdContext) =>
-{
-    return Results.Ok(bdContext.Product);
-});
 
-app.MapPost("/api/products", async ([FromServices] ProductContext bdContext, [FromBody] Product product) =>
-{
-    await bdContext.Product.AddAsync(product);
-    await bdContext.SaveChangesAsync();
-
-    return Results.Ok(product);
-});
-
-app.MapGet("/api/inventorymovements/{productId}", async ([FromServices] ProductContext bdContext, [FromRoute] Guid productId) =>
-{
-    return Results.Ok(bdContext.InventoryMovement.Where(im => im.ProductId == productId).ToList());
-});
-
-app.MapPost("/api/inventorymovements", async ([FromServices] ProductContext bdContext, [FromBody] InventoryMovement inventoryMovement) =>
-{
-    inventoryMovement.Date = DateTime.Now;
-    await bdContext.InventoryMovement.AddAsync(inventoryMovement);
-    await bdContext.SaveChangesAsync();
-
-    return Results.Ok(inventoryMovement);
-});
 
 app.UseJwtMiddleware();
 
-// app.MapControllers();
+app.MapControllers();
 
 app.Run();
 
